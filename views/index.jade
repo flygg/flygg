@@ -1,0 +1,79 @@
+extends layout
+
+block content
+  style.
+    td.highlight { background-color: whitesmoke !important; }
+    tr:hover { background-color: whitesmoke !important; }
+    body { font-family: 'Montserrat', sans-serif; }
+    .dataTables_wrapper { margin-left: -50px; }
+
+  title = 'ff'
+  h1= title  
+  table#matrix.table.table-bordered
+    thead
+      tr
+        th.
+          &nbsp;
+        each departs, depdate in matrix
+          th.text-center
+            span #{Date.parse(depdate).toString('ddd MMM dd')}
+    tbody
+      each departs, depdate in matrix
+        tr
+          td
+            b #{Date.parse(depdate).toString('ddd, MMM dd')}
+          each arrivals, arrdate in departs
+            td.text-right(data-depart="#{Date.parse(depdate).toString('yyyyMMdd0000')}", data-arrive="#{Date.parse(arrdate).toString('yyyyMMdd0000')}")
+              span #{arrivals}
+
+  script.
+    $(window).bind("load", function() {
+        setTimeout(function(){ 
+        
+            dataTable = $('#matrix').dataTable({
+                'bPaginate': false,
+                'bSort': false,
+                'bFilter': false,
+                'scrollX': '100%',
+                'columnDefs': [{ 
+                    width: '120px',
+                    targets: 0 }, { 
+                    width: '40px',
+                    targets: '_all' }, { 
+                    width: '150px',
+                    targets: 0 }]
+            });
+
+            new $.fn.dataTable.FixedColumns(dataTable);
+            //new $.fn.dataTable.FixedHeader(dataTable, {
+            //    'left': true
+            //    });
+
+            var lastIdx = null;
+            $('#matrix tbody').on( 'mouseover', 'td', function () {
+                var colIdx = dataTable.cell(this).index().column;
+                if ( colIdx !== lastIdx ) {
+                    $(dataTable.column(lastIdx).nodes()).removeClass( 'highlight' );
+                    $(dataTable.column(colIdx).nodes()).addClass( 'highlight' );
+                    lastIdx = colIdx;
+                }
+            } )
+            .on( 'mouseleave', function () {
+                $( dataTable.cells().nodes() ).removeClass( 'highlight' );
+            } );
+
+        }, 0);
+
+        var client = new Faye.Client('/faye',{
+          timeout: 20
+        });
+
+        client.subscribe('/HEL-#{to}', function(data) {
+          //cells = $('td[data-depart="' + data.depart + '"][data-arrive="' + data.arrive + '"]');
+          //if (cells.length > 0) {
+            //  var position = dataTable.fnGetPosition(cells[0]);
+            //  dataTable.fnUpdate(data.price, position[0], position[1], false, true);
+          //}
+          $('td[data-depart="' + data.depart + '"][data-arrive="' + data.arrive + '"]').text(data.price);
+        });
+    });
