@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Flygg - Hunt Tickers Faster</title>
+        <link href="//fonts.googleapis.com/css?family=Montserrat:400,700", rel="stylesheet" />
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css", rel="stylesheet" />
+        <link href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css", rel="stylesheet" />
+        <link href="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.css", rel="stylesheet" />
+        <link href="//cdn.datatables.net/fixedcolumns/3.0.0/css/dataTables.fixedColumns.min.css", rel="stylesheet" />
+        <link href="//cdn.datatables.net/fixedheader/2.1.0/css/dataTables.fixedHeader.min.css", rel="stylesheet" />
+        <link href="/stylesheets/style.css" rel="stylesheet" />
+    </head>
+    <body class="bootstrap">
+        <table id="matrix" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <% for(var arrdate in matrix) {%>
+                    <th class="text-center">
+                         <span><%= Date.parse(arrdate).toString('ddd, MMM dd') %></span>
+                    </th>
+                    <% } %>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(var depdate in matrix) {%>
+                <tr>
+                    <td>
+                        <b><%= Date.parse(depdate).toString('ddd, MMM dd') %></b>
+                    </td>
+                    <% for(var arrdate in matrix[depdate]) {%>
+                    <td class="text-right">
+                        <span><%= matrix[depdate][arrdate] %></span>
+                    </td>
+                    <% } %>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+        <script src="//cdn.datatables.net/fixedcolumns/3.0.0/js/dataTables.fixedColumns.min.js"></script>
+        <script src="//cdn.datatables.net/fixedheader/2.1.0/js/dataTables.fixedHeader.min.js"></script>
+        <script src="/javascripts/faye-browser.js"></script>
+        <script type="text/javascript">
+        $(window).bind("load", function() {
+            setTimeout(function(){ 
+                dataTable = $('#matrix').dataTable({
+                    'bPaginate': false,
+                    'bSort': false,
+                    'bFilter': false,
+                    'scrollX': '100%',
+                    'columnDefs': [{ 
+                        width: '120px',
+                        targets: 0 }, { 
+                        width: '40px',
+                        targets: '_all' }, { 
+                        width: '150px',
+                        targets: 0 }]
+                });
+
+                new $.fn.dataTable.FixedColumns(dataTable);
+                //new $.fn.dataTable.FixedHeader(dataTable, {
+                //    'left': true
+                //    });
+
+                var lastIdx = null;
+                /*$('#matrix tbody').on( 'mouseover', 'td', function () {
+                    var colIdx = dataTable.cell(this).index().column;
+                    if ( colIdx !== lastIdx ) {
+                        $(dataTable.column(lastIdx).nodes()).removeClass( 'highlight' );
+                        $(dataTable.column(colIdx).nodes()).addClass( 'highlight' );
+                        lastIdx = colIdx;
+                    }
+                } )
+                .on( 'mouseleave', function () {
+                    $( dataTable.cells().nodes() ).removeClass( 'highlight' );
+                } );*/
+
+            }, 0);
+
+            var client = new Faye.Client('/faye',{
+              timeout: 20
+            });
+
+            client.subscribe('/HEL-<%= to %>', function(data) {
+              $('td[data-depart="' + data.depart + '"][data-arrive="' + data.arrive + '"]').text(data.price);
+            });
+        });
+        </script>
+    </body>
+</html>

@@ -22,6 +22,7 @@ router.get('/search/:iata', function(req, res) {
             util.log(util.format('Searching for flights to %s', req.params.iata));
             finnair.search(Date.today(), 'HEL', req.params.iata)
             .then(function(searches) {
+                util.log('All searches finished; processing results');
                 searches.forEach(function(search) {
                     search.forEach(function (result) {
                         prices[req.params.iata][result.depart][result.arrive] = result.price;
