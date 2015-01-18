@@ -10,6 +10,7 @@ var http = require('http')
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var channels = require('./routes/channels');
+var cache = require('./routes/cache');
 
 var app = express();
 
@@ -65,6 +66,7 @@ app.use(function(err, req, res, next) {
 var server = http.createServer(app)
 var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 
+cache.initialize();
 channels.initialize(bayeux);
 bayeux.attach(server);
 server.listen(8081);

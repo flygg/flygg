@@ -3,6 +3,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 var util = require('util');
 
+var cache = require('./cache');
 var channels = require('./channels');
 
 function params(depart, arrive, from, to) {
@@ -67,11 +68,16 @@ function prepare(depart, arrive, from, to) {
                     arrive: Date.parseExact(data[1].trim(), 'yyyyMMddhhmm'),
                     price: data[2].trim().replace(' EUR', '')
                 });
+
+                var depart = data[0].trim();
+                var arrive = data[1].trim();
+                var price = data[2].trim().replace(' EUR', '');
                 channels.publish(from, to, {
-                    depart: data[0].trim(),
-                    arrive: data[1].trim(),
-                    price: data[2].trim().replace(' EUR', '')
+                    depart: depart,
+                    arrive: arrive,
+                    price: price
                 });
+                cache.preserve('AY', from, to, depart, arrive, price);
             });
             util.log(util.format("Retreived %d results", results.length));
             deferred.resolve(results);

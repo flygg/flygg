@@ -7,6 +7,7 @@ var util = require('util');
 var finnair = require('./finnair');
 var matrix = require('./matrix');
 var airports = require('./airports');
+var cache = require('./cache');
 
 prices = matrix.prepare(30);
 searched = [];
@@ -16,6 +17,7 @@ searched = [];
  * The URL accepts the three-letter IATA code of the destination.
  */
 router.get('/search/:iata', function(req, res) {
+    cache.fetch('HEL', req.params.iata);
     if (req.params.iata in airports.codes) {
         if (prices[req.params.iata] === undefined) {
             prices[req.params.iata] = matrix.prepare(30);

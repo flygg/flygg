@@ -29,7 +29,7 @@
                         <b><%= Date.parse(depdate).toString('ddd, MMM dd') %></b>
                     </td>
                     <% for(var arrdate in matrix[depdate]) {%>
-                    <td class="text-right">
+                    <td class="text-right" data-depart="<%= Date.parse(depdate).toString('yyyyMMdd0000') %>" data-arrive="<%= Date.parse(arrdate).toString('yyyyMMdd0000') %>">
                         <span><%= matrix[depdate][arrdate] %></span>
                     </td>
                     <% } %>
