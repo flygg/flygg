@@ -3,41 +3,45 @@ var datesjs = require('datejs');
 var router = express.Router();
 var promise = require('q');
 var util = require('util');
+var ejs = require('ejs')
 
 var finnair = require('./finnair');
 var matrix = require('./matrix');
 var airports = require('./airports');
 var cache = require('./cache');
 
-prices = matrix.prepare(30);
-searched = [];
+var prices = matrix.prepare(30);
+var searched = [];
 
 /**
  * Main controller that does the search for flights to a destination
  * The URL accepts the three-letter IATA code of the destination.
  */
 router.get('/search/:iata', function(req, res) {
-    cache.fetch('HEL', req.params.iata);
     if (req.params.iata in airports.codes) {
-        if (prices[req.params.iata] === undefined) {
-            prices[req.params.iata] = matrix.prepare(30);
-            util.log(util.format('Searching for flights to %s', req.params.iata));
-            finnair.search(Date.today(), 'HEL', req.params.iata)
-            .then(function(searches) {
-                util.log('All searches finished; processing results');
-                searches.forEach(function(search) {
-                    search.forEach(function (result) {
-                        prices[req.params.iata][result.depart][result.arrive] = result.price;
-                    });
-                });
-            })
-            .fail(function (error) {
-                console.log(error);
+        cache.client().get('HEL/' + req.params.iata, function(error, data) {
+            util.log("Rendering template");
+            res.render('index', {
+                to: req.params.iata,
+                matrix: prices
             });
-        }
-        res.render('index', {
-            to: req.params.iata,
-            matrix: prices[req.params.iata]
+            util.log("Rendered template");
+            if (error || data === null) {
+                util.log(util.format('Searching for flights to %s', req.params.iata));
+                finnair.search(Date.today(), 'HEL', req.params.iata)
+                .then(function(searches) {
+                    cache.client().set('HEL/' + req.params.iata, prices, function(error, data) {
+                        util.log('All searches finished; caching results');
+                    });
+                })
+                .fail(function (error) {
+                    util.log(error);
+                });
+            } else {
+                setTimeout(function () {
+                cache.fetch('HEL', req.params.iata);
+            }, 3000);
+            }
         });
     } else {
         res.status(404).send('Invalid IATA code');

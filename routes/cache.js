@@ -61,6 +61,11 @@ function preserve(airline, from, to, depart, arrive, price) {
     });
 }
 
+function client() {
+    return client
+}
+
 module.exports.initialize = initialize
 module.exports.preserve = preserve
 module.exports.fetch = fetch
+module.exports.client = client

@@ -11,10 +11,10 @@ function prepare(quantity) {
     matrix = {};
     depart = Date.today();
     for (var i = 0; i < quantity; i++) {
-        matrix[depart] = {};
+        matrix[depart.toString('yyyyMMdd0000')] = {};
         arrive = Date.today();
         for (var j = 0; j < quantity; j++) {
-            matrix[depart][arrive] = "";
+            matrix[depart.toString('yyyyMMdd0000')][arrive.toString('yyyyMMdd0000')] = "";
             arrive.add(1).days();
         }
         depart.add(1).days();

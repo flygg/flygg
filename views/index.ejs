@@ -17,7 +17,7 @@
                     <th>&nbsp;</th>
                     <% for(var arrdate in matrix) {%>
                     <th class="text-center">
-                         <span><%= Date.parse(arrdate).toString('ddd, MMM dd') %></span>
+                         <span><%= Date.parseExact(arrdate, 'yyyyMMddhhmm').toString('ddd, MMM dd') %></span>
                     </th>
                     <% } %>
                 </tr>
@@ -26,10 +26,10 @@
                 <% for(var depdate in matrix) {%>
                 <tr>
                     <td>
-                        <b><%= Date.parse(depdate).toString('ddd, MMM dd') %></b>
+                        <b><%= Date.parseExact(depdate, 'yyyyMMddhhmm').toString('ddd, MMM dd') %></b>
                     </td>
                     <% for(var arrdate in matrix[depdate]) {%>
-                    <td class="text-right" data-depart="<%= Date.parse(depdate).toString('yyyyMMdd0000') %>" data-arrive="<%= Date.parse(arrdate).toString('yyyyMMdd0000') %>">
+                    <td class="text-right" data-depart="<%= depdate %>" data-arrive="<%= arrdate %>">
                         <span><%= matrix[depdate][arrdate] %></span>
                     </td>
                     <% } %>
@@ -86,6 +86,7 @@
 
             client.subscribe('/HEL-<%= to %>', function(data) {
               $('td[data-depart="' + data.depart + '"][data-arrive="' + data.arrive + '"]').text(data.price);
+              console.log('Received prices for ' + data.depart + ' to ' + data.arrive);
             });
         });
         </script>
