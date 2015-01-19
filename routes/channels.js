@@ -1,4 +1,5 @@
 var util = require('util');
+var cache = require('./cache');
 
 var socket;
 
@@ -11,6 +12,10 @@ var socket;
 function initialize(bayeux) {
     util.log("Setting up the channel handler to push data to subscribers");
     socket = bayeux;
+    bayeux.on('subscribe', function(clientId, channel) {
+        util.log(util.format("New subscriber listening on channel %s", channel));
+        cache.fetch.apply(this, channel.substring(1).split('-'));
+    })
 }
 
 /**

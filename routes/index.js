@@ -37,10 +37,6 @@ router.get('/search/:iata', function(req, res) {
                 .fail(function (error) {
                     util.log(error);
                 });
-            } else {
-                setTimeout(function () {
-                cache.fetch('HEL', req.params.iata);
-            }, 3000);
             }
         });
     } else {
