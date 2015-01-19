@@ -47,6 +47,7 @@
         $(window).bind("load", function() {
             setTimeout(function(){ 
                 dataTable = $('#matrix').dataTable({
+                    'sDom': '<"top">rt<"bottom"flp><"clear">',
                     'bPaginate': false,
                     'bSort': false,
                     'bFilter': false,
