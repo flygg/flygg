@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var faye = require('faye')
 var http = require('http')
 var toobusy = require('toobusy');
+var compression = require('compression');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -26,15 +27,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(compression());
 app.use('/', routes);
 app.use('/users', users);
 
-app.post('/message', function(req, res) {
-    bayeux.getClient().publish('/LHR', { text: req.body.message });
-    console.log('broadcast message:' + req.body.message);
-    res.status(200).end()
-});
 
 // middleware which blocks requests when we're too busy and retuns a 503
 app.use(function(req, res, next) {
