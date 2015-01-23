@@ -2,7 +2,8 @@ var csv = require('ya-csv');
 
 var airports = {};
 function initialize() {
-    var reader = csv.createCsvFileReader('./routes/airports.dat', {
+    var datfile = path.resolve(__dirname, 'airports.dat');
+    var reader = csv.createCsvFileReader(datfile, {
         'separator': ',',
         'quote': '"',
         'escape': '"',
@@ -30,5 +31,5 @@ function initialize() {
     });
 };
 
-initialize();
+//initialize();
 module.exports.codes = airports
