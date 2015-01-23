@@ -11,6 +11,13 @@
         <link href="/stylesheets/style.css" rel="stylesheet" />
     </head>
     <body class="bootstrap">
+        <div class="banner">
+            <%= from %>
+            <%= to %>
+            <br />
+            <%= to %>
+            <%= from %>
+        </div>
         <table id="matrix" class="table table-bordered">
             <thead>
                 <tr>
@@ -42,7 +49,7 @@
         <script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
         <script src="//cdn.datatables.net/fixedcolumns/3.0.0/js/dataTables.fixedColumns.min.js"></script>
         <script src="//cdn.datatables.net/fixedheader/2.1.0/js/dataTables.fixedHeader.min.js"></script>
-        <script src="/javascripts/faye-browser.js"></script>
+        <script src="/javascripts/faye-browser-min.js"></script>
         <script type="text/javascript">
         $(window).bind("load", function() {
             setTimeout(function(){ 
@@ -85,7 +92,7 @@
               timeout: 20
             });
 
-            client.subscribe('/HEL-<%= to %>', function(data) {
+            client.subscribe('/<%= from %>-<%= to %>', function(data) {
               $('td[data-depart="' + data.depart + '"][data-arrive="' + data.arrive + '"]').text(data.price);
               console.log('Received prices for ' + data.depart + ' to ' + data.arrive);
             });

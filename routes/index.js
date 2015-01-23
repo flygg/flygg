@@ -22,6 +22,7 @@ router.get('/search/:iata', function(req, res) {
         cache.client().get('HEL/' + req.params.iata, function(error, data) {
             util.log("Rendering template");
             res.render('index', {
+                from: 'HEL',
                 to: req.params.iata,
                 matrix: prices
             });
