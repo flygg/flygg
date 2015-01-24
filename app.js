@@ -75,6 +75,6 @@ var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 cache.initialize();
 channels.initialize(bayeux);
 bayeux.attach(server);
-server.listen(8081);
+server.listen(10000);
 
 module.exports = app;
