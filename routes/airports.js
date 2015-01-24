@@ -1,5 +1,6 @@
 var csv = require('ya-csv');
 var path = require('path');
+var util = require('util');
 
 var airports = {};
 function initialize() {
