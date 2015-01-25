@@ -104,10 +104,10 @@ function prepare(depart, arrive, from, to) {
 function search(date, from, to) {
     depart = date.clone().add(-4).days();
     searches = [];
-    for (i = 0; i <= 3; i++) {
+    for (i = 0; i <= 24; i++) {
         depart = depart.add(7).days();
         arrive = date.clone().add(-4).days();
-        for (j = 0; j <= 3; j++) {
+        for (j = 0; j <= 24; j++) {
             arrive = arrive.add(7).days();
             going  = depart.toString('ddd, MMM dd');
             coming = arrive.toString('ddd, MMM dd');
