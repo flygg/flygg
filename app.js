@@ -10,9 +10,8 @@ var toobusy = require('toobusy');
 var compression = require('compression');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
-var channels = require('./routes/channels');
-var cache = require('./routes/cache');
+var channels = require('./services/channels');
+var cache = require('./services/cache');
 
 var app = express();
 
@@ -29,8 +28,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'), {maxAge: '1d'}));
 app.use(compression());
 app.use('/', routes);
-app.use('/users', users);
-
 
 // middleware which blocks requests when we're too busy and retuns a 503
 app.use(function(req, res, next) {

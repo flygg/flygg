@@ -5,12 +5,12 @@ var promise = require('q');
 var util = require('util');
 var ejs = require('ejs')
 
-var finnair = require('./finnair');
-var matrix = require('./matrix');
-var airports = require('./airports');
-var cache = require('./cache');
+var finnair = require('../services/finnair');
+var matrix = require('../services/matrix');
+var airports = require('../services/airports');
+var cache = require('../services/cache');
 
-var prices = matrix.prepare(30);
+var prices = matrix.prepare(180);
 var searched = [];
 
 /**
@@ -34,6 +34,7 @@ router.get('/search/:iata', function(req, res) {
                     cache.client().set('HEL/' + req.params.iata, prices, function(error, data) {
                         util.log('All searches finished; caching results');
                     });
+                    cache.client().expire('HEL/' + req.params.iata, 15 * 60);
                 })
                 .fail(function (error) {
                     util.log(error);

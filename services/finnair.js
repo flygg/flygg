@@ -106,9 +106,9 @@ function search(date, from, to) {
     searches = [];
     for (i = 0; i <= 24; i++) {
         depart = depart.add(7).days();
-        arrive = date.clone().add(-4).days();
-        for (j = 0; j <= 24; j++) {
-            arrive = arrive.add(7).days();
+        arrive = depart.clone().add(-4).days();
+        for (j = 0; j <= 4; j++) {
+            arrive = arrive.add(4).days();
             going  = depart.toString('ddd, MMM dd');
             coming = arrive.toString('ddd, MMM dd');
             util.log(util.format("Preparing search for %s to %s", going, coming));
