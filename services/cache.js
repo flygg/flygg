@@ -11,6 +11,7 @@ var client;
 function initialize() {
     util.log("Setting up the cache manager to store scraped values");
     client = redis.createClient();
+    client.flushall();
 }
 
 /**
