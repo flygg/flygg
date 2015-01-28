@@ -63,15 +63,17 @@ function prepare(depart, arrive, from, to) {
             var $ = cheerio.load(html);
             $('input[name=WDS_DATE]').each(function(i, element) {
                 data = $(element).attr('value').split('|');
+                var price = data[2].trim().slice(0,-7);
+
                 results.push({
                     depart: Date.parseExact(data[0].trim(), 'yyyyMMddhhmm'),
                     arrive: Date.parseExact(data[1].trim(), 'yyyyMMddhhmm'),
-                    price: data[2].trim().slice(0,-7)
+                    price: price
                 });
 
                 var depart = data[0].trim();
                 var arrive = data[1].trim();
-                var price = data[2].trim().slice(0,-7);
+
                 channels.publish(from, to, {
                     depart: depart,
                     arrive: arrive,
