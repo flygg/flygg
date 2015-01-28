@@ -66,12 +66,12 @@ function prepare(depart, arrive, from, to) {
                 results.push({
                     depart: Date.parseExact(data[0].trim(), 'yyyyMMddhhmm'),
                     arrive: Date.parseExact(data[1].trim(), 'yyyyMMddhhmm'),
-                    price: data[2].trim().replace(' EUR', '')
+                    price: data[2].trim().slice(0,-7)
                 });
 
                 var depart = data[0].trim();
                 var arrive = data[1].trim();
-                var price = data[2].trim().replace(' EUR', '');
+                var price = data[2].trim().slice(0,-7);
                 channels.publish(from, to, {
                     depart: depart,
                     arrive: arrive,
