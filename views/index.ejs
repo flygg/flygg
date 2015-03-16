@@ -1,16 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Flygg - Hunt Tickers Faster</title>
+        <title>Flygg - Hunt Tickets Faster</title>
         <link href="//fonts.googleapis.com/css?family=Montserrat:400,700", rel="stylesheet" />
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css", rel="stylesheet" />
         <link href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css", rel="stylesheet" />
         <link href="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.css", rel="stylesheet" />
         <link href="//cdn.datatables.net/fixedcolumns/3.0.0/css/dataTables.fixedColumns.min.css", rel="stylesheet" />
         <link href="//cdn.datatables.net/fixedheader/2.1.0/css/dataTables.fixedHeader.min.css", rel="stylesheet" />
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
         <link href="/stylesheets/style.css" rel="stylesheet" />
     </head>
     <body class="bootstrap">
+        <div id="flygg">        
+        <a class="step-search"><img class="logo" src="/static/images/logo.png"></a>
+            
+        <!-- Home -->
+        <section class="home" id="home">
+            <div class="magic-box">
+                <span class="input input--minoru">
+
+                        <input id="pick-airport" placeholder="To where would you like to fly?"  autofocus="autofocus"  class="input__field input__field--yoko" type="text" id="input-16" />
+                    <label class="input__label input__label--yoko" for="input-16">
+                        <span class="input__label-content input__label-content--yoko"></span>
+                    </label>
+
+                </span>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section id="results">
+        <div class="magic-box">
+            <a class="step-go-home">
+                <div class="spinner"></div>
+            </a>
+        </div>
+
+        <div class="results-advanced" style="display: none;">     
         <div class="banner">
             <%= from %>
             <%= to %>
@@ -44,12 +71,26 @@
                 <% } %>
             </tbody>
         </table>
+        </div>
+    
+        <div class="airport-board">
+            <button>Book now on finnair</button>
+        </div>
+        </section>
+        </div>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
         <script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
         <script src="//cdn.datatables.net/fixedcolumns/3.0.0/js/dataTables.fixedColumns.min.js"></script>
         <script src="//cdn.datatables.net/fixedheader/2.1.0/js/dataTables.fixedHeader.min.js"></script>
         <script src="/javascripts/faye-browser-min.js"></script>
+        
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+        <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+        <script src="/javascripts/stickyheader.js"></script>
+        <script src="/javascripts/main.js"></script>
+        
         <script type="text/javascript">
         $(window).bind("load", function() {
             setTimeout(function(){ 
@@ -98,5 +139,32 @@
             });
         });
         </script>
+        <script>
+          $(function() {
+            var availableTags = [
+              "Auckland AKL",
+              "Sydney SYD",
+              "Austin AUS",
+              "New Zealand",
+              "New York City",
+              "Stockholm",
+              "Tokyo",
+              "Canbera",
+              "Vancouver",
+              "San Francisco",
+              "Berlin",
+              "Prague",
+              "London",
+              "Reykjavik",
+              "Olso",
+              "Amsterdam"
+            ];
+            $( "#pick-airport" ).autocomplete({
+               source: availableTags,
+               autoFocus: true,
+               minLength: 1
+            });
+          });
+    </script>
     </body>
 </html>
