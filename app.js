@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var faye = require('faye')
 var http = require('http')
-var toobusy = require('toobusy');
+var toobusy = require('toobusy-js');
 var compression = require('compression');
 
 var routes = require('./routes/index');
